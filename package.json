@@ -8,12 +8,19 @@
     "start": "next start"
   },
   "dependencies": {
+    "mailgun-js": "^0.22.0",
+    "materialize-css": "^1.0.0-rc.2",
     "next": "10.0.4",
+    "papaparse": "^5.3.0",
     "react": "17.0.1",
-    "react-dom": "17.0.1"
+    "react-dom": "17.0.1",
+    "react-google-login": "^5.2.1"
   },
   "devDependencies": {
+    "@types/mailgun-js": "^0.22.11",
+    "@types/materialize-css": "^1.0.8",
     "@types/node": "^14.14.14",
+    "@types/papaparse": "^5.2.4",
     "@types/react": "^17.0.0",
     "typescript": "^4.1.3"
   }

@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from './Button';
 
 interface Form {
     last_name: string;
@@ -24,59 +25,50 @@ export default function SendSample({ onSubmit }: Props) {
         };
     }
     return (
-        <div className="row">
-            <div className="col s12">
-                <div className="row">
-                    <p className="flow-text">Step 4. Send Sample Email</p>
-                    <form onSubmit={onSubmit}>
-                        <div className="input-field col s12">
-                            <input
-                                id="sample_email"
-                                type="email"
-                                required
-                                className="validate"
-                                value={form.email}
-                                onChange={handleChange('email')}
-                            />
-                            <label htmlFor="sample_email">Email</label>
-                        </div>
-                        <div className="input-field col s12">
-                            <input
-                                id="sample_first_name"
-                                required
-                                type="text"
-                                className="validate"
-                                value={form.first_name}
-                                onChange={handleChange('first_name')}
-                            />
-                            <label htmlFor="sample_first_name">
-                                First Name
-                            </label>
-                        </div>
-                        <div className="input-field col s12">
-                            <input
-                                id="sample_last_name"
-                                required
-                                type="text"
-                                className="validate"
-                                value={form.last_name}
-                                onChange={handleChange('last_name')}
-                            />
-                            <label htmlFor="sample_last_name">Last Name</label>
-                        </div>
-                        <div className="col s12 right-align">
-                            <button
-                                className="btn waves-effect waves-light"
-                                type="submit"
-                                name="action"
-                            >
-                                Send Sample
-                                <i className="material-icons right">send</i>
-                            </button>
-                        </div>
-                    </form>
+        <div className="container space-y-4">
+            <p className="uppercase">Step 4. Send Sample Email</p>
+            <p className="pl-8">
+                Send a sample email to yourself.{' '}
+                <b>It will probably take a few minutes.</b>
+            </p>
+            <form className="flex flex-col space-y-4 pl-8" onSubmit={onSubmit}>
+                <div className="flex-auto">
+                    <input
+                        id="sample_email"
+                        type="email"
+                        required
+                        className="shadow rounded pl-2 py-0.5 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                        value={form.email}
+                        onChange={handleChange('email')}
+                        placeholder="Email"
+                    />
                 </div>
-            </div>
+                <div className="flex-auto">
+                    <input
+                        id="sample_first_name"
+                        required
+                        type="text"
+                        className="shadow rounded pl-2 py-0.5 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                        value={form.first_name}
+                        onChange={handleChange('first_name')}
+                        placeholder="First Name"
+                    />
+                </div>
+                <div className="flex-auto">
+                    <input
+                        id="sample_last_name"
+                        required
+                        type="text"
+                        className="shadow rounded pl-2 py-0.5 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                        value={form.last_name}
+                        onChange={handleChange('last_name')}
+                        placeholder="Last Name"
+                    />
+                </div>
+                <div className="flex-auto">
+                    <Button type="submit">Send Sample</Button>
+                </div>
+            </form>
         </div>
     );
 }

@@ -6,12 +6,21 @@ import TextField from '../components/TextField';
 import FileField from '../components/FileField';
 import ExampleFileDownload from '../components/ExampleFileDownload';
 import SendSample from '../components/SendSample';
+import Divider from '../components/Divider';
+import Modal from '../components/Modal';
+import Button from '../components/Button';
+import Title from '../components/Title';
 
 type State = {
     apiKey: string;
     email: string;
     emailTemplate: File | null;
     userList: File | null;
+    domain: string;
+    from: string;
+    selectedTemplate: string;
+    tags: string;
+    subject: string;
 };
 
 export default function Home() {
@@ -20,8 +29,14 @@ export default function Home() {
         email: '',
         emailTemplate: null,
         userList: null,
+        domain: '',
+        from: '',
+        selectedTemplate: '',
+        tags: '',
+        subject: '',
     });
     const router = useRouter();
+    const [open, setOpen] = useState(false);
 
     function handleChange(k: keyof State) {
         return (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,18 +62,13 @@ export default function Home() {
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
-            import('materialize-css').then((M) => {
-                const elems = document.querySelectorAll('.modal');
-                M.Modal.init(elems, {
-                    onCloseEnd: () => {},
-                });
-            });
         }
     }, []);
 
-    function handleSendAll(_e: React.MouseEvent<HTMLButtonElement>) {
+    function handleSendAll() {
         console.log('send all');
         router.push('loading');
+        setOpen(false);
         new Promise((resolve, reject) => {
             router.push('/loading');
             setTimeout(resolve, 300);
@@ -67,28 +77,9 @@ export default function Home() {
             .catch(() => router.push('/error'));
     }
     return (
-        <div className="container">
-            <div id="confirmation-modal" className="modal">
-                <div className="modal-content">
-                    <h4>Please Confirm</h4>
-                    <p>Are you sure you want to send this email to all?</p>
-                </div>
-                <div className="modal-footer">
-                    <button
-                        type="button"
-                        className="modal-close waves-effect waves-red btn-flat"
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        type="button"
-                        className="modal-close waves-effect waves-green btn"
-                        onClick={handleSendAll}
-                    >
-                        Agree
-                    </button>
-                </div>
-            </div>
+        <div className="sm:container sm:mx-auto space-y-4 flex flex-col h-full bg-white shadow p-8 mb-8">
+            <p className="text-4xl font-thin">Mailgun Mini</p>
+            <Modal open={open} onClose={() => setOpen(false)} onAccept={handleSendAll} />
             <TextField
                 value={state.apiKey}
                 onChange={handleChange('apiKey')}
@@ -96,12 +87,36 @@ export default function Home() {
                 id="mailgun_api_key"
                 label="Mailgun API Key"
             />
-            <FileField
-                title="Step 2. Select Email Template to use"
-                // value={state.email}
-                onChange={handleFileChange('emailTemplate')}
-                accept="text/html"
+            <TextField
+                value={state.domain}
+                onChange={handleChange('domain')}
+                id="mailgun_domain"
+                label="Mailgun domain"
             />
+            <TextField value={state.from} onChange={handleChange('from')} id="mailgun_from" label="From" />
+
+            <TextField value={state.tags} onChange={handleChange('tags')} id="mailgun_tags" label="Tags" />
+            <TextField
+                value={state.subject}
+                onChange={handleChange('subject')}
+                id="mailgun_subject"
+                label="Email Subject"
+            />
+
+            <Divider />
+            <div className="container flex flex-wrap flex-col space-y-3">
+                <div className="flex-auto">
+                    <Title>Step 2. Select Template to Use</Title>
+                </div>
+                <div className="flex-auto pl-8">
+                    <Button disabled={!state.apiKey || !state.domain} onClick={() => console.log('browse list')}>
+                        Browse Template List
+                    </Button>
+                </div>
+            </div>
+
+            <Divider />
+
             <FileField
                 title="Step 3. Select list of users to use"
                 // value={state.userList}
@@ -111,23 +126,24 @@ export default function Home() {
                 <ExampleFileDownload />
             </FileField>
             {state.userList && <Preview file={state.userList} />}
+
+            <Divider />
+
             <SendSample onSubmit={handleSendSample} />
-            <div className="row">
-                <div className="col s12">
-                    <div className="row">
-                        <p className="flow-text">Step 5. Send to full list</p>
-                        <div className="col s12 center-align">
-                            <button
-                                className="btn waves-effect waves-light modal-trigger"
-                                type="button"
-                                name="action"
-                                data-target="confirmation-modal"
-                            >
-                                Send to all
-                                <i className="material-icons right">send</i>
-                            </button>
-                        </div>
-                    </div>
+
+            <Divider />
+            <div className="flex flex-col space-y-4">
+                <p className="flex-auto uppercase">Step 5. Send to full list</p>
+                <div className="flex-auto pl-8">
+                    <button
+                        type="button"
+                        name="action"
+                        data-target="confirmation-modal"
+                        className="bg-blue-200 rounded shadow p-1 uppercase hover:shadow-md hover:bg-blue-400 transition-all flex-auto"
+                        onClick={() => setOpen(true)}
+                    >
+                        Send to all
+                    </button>
                 </div>
             </div>
         </div>

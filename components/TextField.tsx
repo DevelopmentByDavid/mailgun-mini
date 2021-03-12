@@ -1,5 +1,5 @@
 interface Props {
-    title: string;
+    title?: string;
     value: string;
     onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     label: string;
@@ -13,22 +13,18 @@ export default function TextField({
     id,
 }: Props) {
     return (
-        <div className="row">
-            <div className="col s12">
-                <div className="row">
-                    <p className="flow-text">{title}</p>
-                    <div className="input-field col s12">
-                        <input
-                            id={id}
-                            type="text"
-                            className="validate"
-                            value={value}
-                            required
-                            onChange={onChange}
-                        />
-                        <label htmlFor={id}>{label}</label>
-                    </div>
-                </div>
+        <div className="container flex flex-wrap flex-col space-y-3">
+            {title && <p className="flex-auto flex-grow uppercase">{title}</p>}
+            <div className="flex-auto pl-8">
+                <input
+                    id={id}
+                    type="text"
+                    className="shadow rounded pl-2 py-0.5 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    value={value}
+                    required
+                    onChange={onChange}
+                    placeholder={label}
+                />
             </div>
         </div>
     );

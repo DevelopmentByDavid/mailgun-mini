@@ -15,26 +15,16 @@ export default function FielField({
     accept,
 }: Props) {
     return (
-        <div className="row">
-            <div className="col s12">
-                <div className="row">
-                    <p className="flow-text">{title}</p>
-                    {children}
-                    <div className="file-field input-field">
-                        <div className="btn">
-                            <span>File</span>
-                            <input
-                                // value={value}
-                                onChange={onChange}
-                                type="file"
-                                accept={accept}
-                            />
-                        </div>
-                        <div className="file-path-wrapper">
-                            <input className="file-path validate" type="text" />
-                        </div>
-                    </div>
-                </div>
+        <div className="container flex flex-wrap flex-col space-y-4">
+            <p className="flex-auto uppercase">{title}</p>
+            <div className="flex-auto pl-8">{children}</div>
+            <div className="flex-auto pl-8">
+                <input
+                    // value={value}
+                    onChange={onChange}
+                    type="file"
+                    accept={accept}
+                />
             </div>
         </div>
     );

@@ -1,62 +1,58 @@
-import mg from 'mailgun-js';
+import FormData from 'form-data';
+import axios, { AxiosInstance, AxiosResponse } from 'axios';
 
-const FROM = process.env.MG_FROM;
-const REPLY_TO = process.env.MG_REPLY_TO;
-const API_KEY = process.env.MG_API_KEY;
-const DOMAIN = process.env.MG_DOMAIN;
+const url = 'https://api.mailgun.net/v3/';
 
-const mail = mg({ apiKey: API_KEY, domain: DOMAIN });
-
-/**
- * get all templates
- */
-export async function getTemplates(): Promise<{
-    items: { createdAt: string; description: string; name: string }[];
-    paging: {
-        first: string;
-        last: string;
-        next: string;
-        prev: string;
-    };
-}> {
-    return mail.get(`/${DOMAIN}/templates`, { limit: 10 });
+export interface MailOpts {
+    from: string;
+    to: string;
+    subject: string;
+    template: string;
+    'o:tag': string;
+    'recipient-variables': Record<string, { first_name: string; last_name: string }>;
+    'h:Reply-To': string;
 }
 
-export const getDefaultData = (): Partial<mg.messages.SendData> & {
-    'h:List-Unsubscribe': string;
-} => ({
-    from: FROM,
-    'h:Reply-To': REPLY_TO,
-    'h:List-Unsubscribe': '%unsubscribe_url%',
-    'o:tracking-clicks': true,
-    'o:tracking-opens': true,
-    'o:tracking': true,
-});
+export default class Mailgun {
+    domain: string;
+    apiKey: string;
+    url: string;
+    axios: AxiosInstance;
+    constructor(domain: string, apiKey: string) {
+        this.domain = domain;
+        this.apiKey = apiKey;
+        this.url = `${url}${domain}`;
+        this.axios = axios.create({
+            baseURL: this.url,
+            auth: {
+                username: 'api',
+                password: apiKey,
+            },
+        });
+    }
 
-/**
- * send a batch of emails
- */
-export async function sendEmails(data: { email: string; firstName: string; lastName: string }[], subject: string) {
-    const recipientVars = data.reduce(
-        (accum, { email, firstName, lastName }) => ({ ...accum, [email]: { firstName, lastName } }),
-        {}
-    );
-    const emails = data.map(({ email }) => email);
-    return mail.messages().send({
-        ...getDefaultData(),
-        to: emails,
-        'recipient-variables': recipientVars,
-        subject,
-    });
-}
+    getTemplates(): Promise<
+        AxiosResponse<{
+            items: { createdAt: string; description: string; name: string }[];
+            paging: {
+                first: string;
+                last: string;
+                next: string;
+                prev: string;
+            };
+        }>
+    > {
+        return this.axios.get('/templates');
+    }
 
-/**
- * sends a single mailgun email
- */
-export async function sendEmail({ email, firstName, lastName }: Record<'email' | 'firstName' | 'lastName', string>) {
-    return mail.messages().send({
-        ...getDefaultData(),
-        to: email,
-        'recipient-variables': { [email]: { firstName, lastName } },
-    });
+    sendEmails(options: MailOpts) {
+        const form = new FormData();
+        const entries = Object.entries(options);
+        for (let i = 0; i < entries.length; i += 1) {
+            form.append(entries[i][0], entries[i][1]);
+        }
+        return this.axios.post('/messages', form);
+    }
+
+    // sendSample(options: Pick<MailOpts, 'from' | 'to'>);
 }

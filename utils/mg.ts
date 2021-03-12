@@ -49,9 +49,13 @@ export default class Mailgun {
         const form = new FormData();
         const entries = Object.entries(options);
         for (let i = 0; i < entries.length; i += 1) {
-            form.append(entries[i][0], entries[i][1]);
+            if (typeof entries[i][1] === 'object') {
+                form.append(entries[i][0], JSON.stringify(entries[i][1]));
+            } else {
+                form.append(entries[i][0], entries[i][1]);
+            }
         }
-        return this.axios.post('/messages', form);
+        return this.axios.post('/messages', form, { headers: { ...form.getHeaders() } });
     }
 
     // sendSample(options: Pick<MailOpts, 'from' | 'to'>);

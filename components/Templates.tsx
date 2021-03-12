@@ -32,7 +32,6 @@ export default function Templates({ templateName, setTemplateName }: Props) {
             isMounted = false;
         };
     }, [info]);
-    console.log(templateName);
     if (templates.length === 0)
         return (
             <Typography variant="body2" color="textSecondary" align="center">

@@ -59,28 +59,24 @@ export default function Settings<T extends State>({ state, setState }: Props<T>)
             <TextField
                 helperText="Ex. MeowGun <no-reply@meowgun.com>"
                 label="From"
-                variant="filled"
                 value={state.from}
                 onChange={handleChange('from')}
             />
             <TextField
                 helperText="Ex. help@meowgun.com"
                 label="Reply To"
-                variant="filled"
                 value={state.replyTo}
                 onChange={handleChange('replyTo')}
             />
             <TextField
                 helperText="Ex. Your Daily Cat Facts"
                 label="Subject"
-                variant="filled"
-                value={state.tags}
+                value={state.subject}
                 onChange={handleChange('subject')}
             />
             <TextField
                 helperText="Ex. tag-1,tag-2,tag-3 (comma separated)"
                 label="Tags"
-                variant="filled"
                 value={state.tags}
                 onChange={handleChange('tags')}
             />

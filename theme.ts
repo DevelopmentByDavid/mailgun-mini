@@ -17,6 +17,11 @@ const theme = createMuiTheme({
             default: '#fff',
         },
     },
+    props: {
+        MuiTextField: {
+            variant: 'filled',
+        },
+    },
 });
 
 export default theme;

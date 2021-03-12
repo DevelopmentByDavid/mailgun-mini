@@ -44,10 +44,8 @@ export default function Home() {
                             <ListItem button onClick={() => setOpen('send-email')}>
                                 <ListItemText primary="Send Email" />
                             </ListItem>
-                            <Request title="Send Emails" onClose={() => setOpen('')} open={open === 'send-email'}>
-                                <SendEmails />
-                            </Request>
                         </List>
+                        <SendEmails title="Send Emails" onClose={() => setOpen('')} open={open === 'send-email'} />
                     </>
                 )}
             </CardContent>

@@ -1,17 +1,18 @@
-import React, { useEffect, useState } from "react";
-import papaparse from "papaparse";
-import { makeStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
+import React, { useEffect, useState } from 'react';
+import papaparse from 'papaparse';
+import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 
 interface Props {
     file: File;
+    onParseComplete: (data: Datum[]) => void;
 }
 
 interface Datum {
@@ -26,13 +27,14 @@ const useStyles = makeStyles({
     },
 });
 
-export default function Preview({ file }: Props) {
+export default function Preview({ file, onParseComplete }: Props) {
     const classes = useStyles();
     const [state, setState] = useState<Datum[]>([]);
     useEffect(() => {
         papaparse.parse<Datum>(file, {
             complete: (results) => {
                 setState(results.data);
+                onParseComplete(results.data);
             },
             header: true,
         });
@@ -52,9 +54,9 @@ export default function Preview({ file }: Props) {
                 <TableBody>
                     {state.slice(0, 5).map(({ first_name, last_name, email }) => (
                         <TableRow key={email}>
-                            <TableCell>{first_name || "error :("}</TableCell>
-                            <TableCell>{last_name || "error :("}</TableCell>
-                            <TableCell>{email || "error: ("}</TableCell>
+                            <TableCell>{first_name || 'error :('}</TableCell>
+                            <TableCell>{last_name || 'error :('}</TableCell>
+                            <TableCell>{email || 'error: ('}</TableCell>
                         </TableRow>
                     ))}
                 </TableBody>

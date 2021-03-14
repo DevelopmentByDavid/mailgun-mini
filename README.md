@@ -1,34 +1,37 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Mailgun Mini
 
-## Getting Started
+Work in progress basic UI for mailgun api
 
-First, run the development server:
+## Usage
 
-```bash
-npm run dev
-# or
-yarn dev
+### Step 1. Fill in the global settings required for every request
+
+### Step 2. Click on the request you wish to use
+
+### Step 3. Fill out the form shown
+
+Given a `list.csv` with the following content
+
+```csv
+first_name,last_name,email
+john,doe,email@email.com
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+If you would like the subject line to read:
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+`Hi, John`
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+make your subject line
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+`Hi, %recipient.first_name%` (this is called a recipient variable)
 
-## Learn More
+You may also use `%recipient.first_name%` and `%recipient.last_name%` in the body of the email template.
 
-To learn more about Next.js, take a look at the following resources:
+### Step 4. Send a sample to yourself
+The recipient variables used above may also be used in the same way for the sample email.  If they do not work, then something is wrong.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Step 5. Upload a list with `first_name`, `last_name`, `email`
+Recommendation: use a list to send to yourself with multiple emails first to test your template and email.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/import?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Step 6. Click send
+This will send the list uploaded.  You may change the list.  The list may be at most 1k recipients at a time.

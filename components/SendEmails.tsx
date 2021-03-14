@@ -43,23 +43,31 @@ interface Props {
     open: boolean;
     onClose: () => void;
 }
-
+const initialState = {
+    ...initialSettingsState,
+    to: [],
+    file: null,
+    sampleEmail: '',
+    templateName: '',
+    sampleFirst: '',
+    sampleLast: '',
+};
 export default function SendEmails({ onClose, open, title }: Props) {
     const classes = useStyles();
-    const { run, data, isPending, error } = useFetch('/api/send-invites', {
+    const { run, data, isPending, error, isResolved } = useFetch('/api/send-invites', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
     });
+
     const [info] = useMailgun();
-    const [state, setState] = React.useState<State>({
-        ...initialSettingsState,
-        to: [],
-        file: null,
-        sampleEmail: '',
-        templateName: '',
-        sampleFirst: '',
-        sampleLast: '',
-    });
+    const [state, setState] = React.useState<State>(initialState);
+    React.useEffect(() => {
+        if (error) alert(error);
+        if (isResolved) {
+            alert('Success!');
+            onClose();
+        }
+    }, [error, isResolved]);
 
     function handleFileChange(k: keyof State) {
         return (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -178,7 +186,7 @@ export default function SendEmails({ onClose, open, title }: Props) {
             </DialogContent>
             <DialogActions>
                 <Button onClick={onClose}>Cancel</Button>
-                <Button variant="contained" color="primary" onClick={handleSendAll}>
+                <Button disabled={isPending} variant="contained" color="primary" onClick={handleSendAll}>
                     Send
                 </Button>
             </DialogActions>

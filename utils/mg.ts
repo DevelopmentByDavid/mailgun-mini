@@ -9,7 +9,10 @@ export interface MailOpts {
     subject: string;
     template: string;
     'o:tag': string;
-    'recipient-variables': Record<string, { first_name: string; last_name: string }>;
+    'recipient-variables': Record<
+        string,
+        { first_name: string; last_name: string; link_survey?: string; link_join?: string; link_background?: string }
+    >;
     'h:Reply-To': string;
 }
 

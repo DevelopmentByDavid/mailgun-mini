@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import papaparse from 'papaparse';
 import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -19,6 +18,9 @@ interface Datum {
     first_name: string;
     last_name: string;
     email: string;
+    link_survey?: string;
+    link_join?: string;
+    link_background?: string;
 }
 
 const useStyles = makeStyles({
@@ -49,16 +51,24 @@ export default function Preview({ file, onParseComplete }: Props) {
                         <TableCell>First Name</TableCell>
                         <TableCell>Last Name</TableCell>
                         <TableCell>Email</TableCell>
+                        <TableCell>Survey Link</TableCell>
+                        <TableCell>Join Link</TableCell>
+                        <TableCell>Background Link</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {state.slice(0, 5).map(({ first_name, last_name, email }) => (
-                        <TableRow key={email}>
-                            <TableCell>{first_name || 'error :('}</TableCell>
-                            <TableCell>{last_name || 'error :('}</TableCell>
-                            <TableCell>{email || 'error: ('}</TableCell>
-                        </TableRow>
-                    ))}
+                    {state
+                        .slice(0, 5)
+                        .map(({ first_name, last_name, email, link_survey, link_join, link_background }) => (
+                            <TableRow key={email}>
+                                <TableCell>{first_name || 'error :('}</TableCell>
+                                <TableCell>{last_name || 'error :('}</TableCell>
+                                <TableCell>{email || 'error: ('}</TableCell>
+                                <TableCell>{link_survey || 'no link found'}</TableCell>
+                                <TableCell>{link_join || 'no link found'}</TableCell>
+                                <TableCell>{link_background || 'no link found'}</TableCell>
+                            </TableRow>
+                        ))}
                 </TableBody>
             </Table>
         </TableContainer>

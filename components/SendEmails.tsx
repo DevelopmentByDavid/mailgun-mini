@@ -30,7 +30,14 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface State extends SettingsState {
-    to: { first_name: string; last_name: string; email: string }[];
+    to: {
+        first_name: string;
+        last_name: string;
+        email: string;
+        link_survey?: string;
+        link_join?: string;
+        link_background?: string;
+    }[];
     file: File | null;
     sampleEmail: string;
     templateName: string;
@@ -125,7 +132,7 @@ export default function SendEmails({ onClose, open, title }: Props) {
     }
 
     return (
-        <Dialog open={open} onClose={onClose}>
+        <Dialog open={open} onClose={onClose} onExited={() => setState(initialState)}>
             <DialogTitle>{title}</DialogTitle>
             <DialogContent style={{ minWidth: 500 }}>
                 <Grid container direction="column" className={classes.root}>

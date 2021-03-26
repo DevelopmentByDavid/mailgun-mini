@@ -6,7 +6,14 @@ import Mailgun, { MailOpts } from '../../utils/mg';
 interface Body {
     apiKey: string;
     domain: string;
-    to: { first_name: string; last_name: string; email: string }[];
+    to: {
+        first_name: string;
+        last_name: string;
+        email: string;
+        link_survey?: string;
+        link_join?: string;
+        link_background?: string;
+    }[];
     subject: string;
     tags: string;
     replyTo: string;
@@ -27,6 +34,9 @@ const schema: yup.SchemaOf<Body> = yup
                     first_name: yup.string().required(),
                     last_name: yup.string().required(),
                     email: yup.string().required(),
+                    link_survey: yup.string().optional(),
+                    link_join: yup.string().optional(),
+                    link_background: yup.string().optional(),
                 })
             )
             .required(),
@@ -46,7 +56,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const { domain, apiKey, ...rest } = req.body;
     const mg = new Mailgun(domain, apiKey);
     const recipientVars = rest.to.reduce(
-        (accum, item) => ({ ...accum, [item.email]: { first_name: item.first_name, last_name: item.last_name } }),
+        (accum, item) => ({
+            ...accum,
+            [item.email]: {
+                first_name: item.first_name,
+                last_name: item.last_name,
+                link_join: item.link_join,
+                link_survey: item.link_survey,
+                link_background: item.link_background,
+            },
+        }),
         {}
     );
     const to = rest.to.map(({ email }) => email).join(',');

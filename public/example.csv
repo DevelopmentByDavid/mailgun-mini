@@ -1,5 +1,5 @@
-first_name,last_name,email
-John,Doe,jdoe@example.com
+first_name,last_name,email,link_join
+John,Doe,jdoe@example.com,https://www.youtube.com
 Jane,Doe,jane123@example.com
 Longgggggggggg, Nameeeeeeeeee,jdoe@example.com
 Jane,Doe,jane123@example.com

@@ -43,6 +43,9 @@ interface State extends SettingsState {
     templateName: string;
     sampleFirst: string;
     sampleLast: string;
+    sampleJoinLink: string;
+    sampleBackgroundLink: string;
+    sampleSurveyLink: string;
 }
 
 interface Props {
@@ -54,10 +57,13 @@ const initialState = {
     ...initialSettingsState,
     to: [],
     file: null,
-    sampleEmail: '',
     templateName: '',
+    sampleEmail: '',
     sampleFirst: '',
     sampleLast: '',
+    sampleJoinLink: '',
+    sampleBackgroundLink: '',
+    sampleSurveyLink: '',
 };
 export default function SendEmails({ onClose, open, title }: Props) {
     const classes = useStyles();
@@ -93,13 +99,23 @@ export default function SendEmails({ onClose, open, title }: Props) {
     }
     function handleSendSample() {
         if (info.apiKey && info.domain) {
+            console.log(state);
             run((init) => ({
                 ...init,
                 body: JSON.stringify({
                     apiKey: info.apiKey,
                     domain: info.domain,
                     from: state.from,
-                    to: [{ first_name: state.sampleFirst, last_name: state.sampleLast, email: state.sampleEmail }],
+                    to: [
+                        {
+                            first_name: state.sampleFirst,
+                            last_name: state.sampleLast,
+                            email: state.sampleEmail,
+                            link_survey: state.sampleSurveyLink,
+                            link_background: state.sampleBackgroundLink,
+                            link_join: state.sampleJoinLink,
+                        },
+                    ],
                     subject: state.subject,
                     tags: state.tags,
                     replyTo: state.replyTo,
@@ -160,6 +176,21 @@ export default function SendEmails({ onClose, open, title }: Props) {
                             type="email"
                             value={state.sampleEmail}
                             onChange={handleChange('sampleEmail')}
+                        />
+                        <TextField
+                            label="Sample Join URL"
+                            value={state.sampleJoinLink}
+                            onChange={handleChange('sampleJoinLink')}
+                        />
+                        <TextField
+                            label="Sample Background URL"
+                            value={state.sampleBackgroundLink}
+                            onChange={handleChange('sampleBackgroundLink')}
+                        />
+                        <TextField
+                            label="Sample Survey URL"
+                            value={state.sampleSurveyLink}
+                            onChange={handleChange('sampleSurveyLink')}
                         />
                         <Button onClick={handleSendSample}>Send Sample</Button>
                     </Grid>
